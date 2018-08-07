@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/require.js" defer data-main='./js/main'></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .wrap {
+            height: 300px;
+            width: 600px;
+            margin: 60px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wrap ul {
+            position: absolute;
+        }
+        
+        .wrap ul li {
+            height: 300px;
+        }
+        
+        .wrap ol {
+            position: absolute;
+            right: 5px;
+            bottom: 10px;
+        }
+        
+        .wrap ol li {
+            height: 20px;
+            width: 20px;
+            background: #ddd;
+            border: 1px solid #969591;
+            border-radius: 50%;
+            margin-left: 5px;
+            color: #959490;
+            float: left;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .wrap ol .on {
+            background: #8F9E9E;
+            color: #fff;
+        }
+        
+        #list {
+            position: absolute;
+            bottom: 20px;
+            left: 160px;
+        }
+        
+        img {
+            width: 600px;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap" id="wrap">
+        <ul id="pic">
+            <li><img src="https://i1.mifile.cn/f/i/18/migaminglaptop/screen.jpg" alt=""></li>
+            <li><img src="https://i1.mifile.cn/f/i/18/gamelaptop//4k.jpg?v=1" alt=""></li>
+            <li><img src="https://i1.mifile.cn/f/i/18/gamelaptop//rpg.jpg" alt=""></li>
+            <li><img src="https://i1.mifile.cn/f/i/2018/mi8/summary/gallery1.jpg" alt=""></li>
+            <li><img src="https://i1.mifile.cn/f/i/2018/mi8/summary/gallery3.jpg" alt=""></li>
+        </ul>
+        <ol id="list">
+            <li class="on">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ol>
+    </div>
+    <script>
+        var wrap = document.getElementById('wrap'),
+            pic = document.getElementById('pic'),
+            list = document.getElementById('list').getElementsByTagName('li'),
+            index = 0,
+            timer = null;
+
+        // 若果有在等待的定时器，则清掉
+        if (timer) {
+            clearInterval(timer);
+            timer = null;
+        }
+
+        // 自动切换
+        timer = setInterval(autoPlay, 2000);
+
+        // 定义并调用自动播放函数
+        function autoPlay() {
+            index++;
+            if (index >= list.length) {
+                index = 0;
+            }
+            changeImg(index);
+        }
+
+        // 定义图片切换函数
+        function changeImg(curIndex) {
+            for (var j = 0; j < list.length; j++) {
+                list[j].className = "";
+            }
+            // 改变当前显示索引
+            list[curIndex].className = "on";
+            pic.style.marginTop = -300 * curIndex + "px";
+            index = curIndex;
+        }
+
+        // 鼠标划过整个容器时停止自动播放
+        wrap.onmouseover = function() {
+            clearInterval(timer);
+        }
+
+        // 鼠标离开整个容器时继续播放至下一张
+        wrap.onmouseout = function() {
+            timer = setInterval(autoPlay, 2000);
+        }
+
+        // 遍历所有数字导航实现划过切换至对应的图片
+        for (var i = 0; i < list.length; i++) {
+            list[i].id = i;
+            list[i].onmouseover = function() {
+                clearInterval(timer);
+                changeImg(this.id);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
